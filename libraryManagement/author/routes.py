@@ -81,17 +81,21 @@ class Author(Resource):
         
         if new_name and new_name != old_name:
             if Authors.query.filter_by(name=new_name).first() is not None:
-                # return jsonify(), 400
+
                 return {"msg": "Author name is already taken"},400
             author.name = new_name
         if biography:
             author.biography = biography
         if dob:
-            author.dob = dob
+            try:
+                    dob = datetime.datetime.strptime(dob, '%Y-%m-%d').date()  
+                    author.dob = dob
+            except ValueError:
+                    return jsonify({"msg": "Invalid date format. Use YYYY-MM-DD"}), 400
         
         db.session.commit()
         
-        return {'msg': f"{new_name} Author is successfully updated"}
+        return {'msg': f"{new_name if new_name else old_name} Author is successfully updated"}
 
     @jwt_required()
     def delete(self):

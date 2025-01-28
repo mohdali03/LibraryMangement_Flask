@@ -2,12 +2,12 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 from marshmallow import fields
 from .model import LibraryMembers, Books, Authors
-
 class LibraryMemberSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = LibraryMembers
         include_relationships = True
-        load_instance = True 
+        load_instance = True
+        exclude = ("password",'register_date')
 class AuthorSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Authors
